@@ -14,30 +14,30 @@ import java.util.Optional;
 public class LibraryController {
     @Autowired
     LibraryService libraryService;
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping(path = "/books")
     public List<LibraryModel> findAllBooks() {
         return libraryService.findAllBooks();
     }
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping(path = "/books/{id}")
     public Optional<LibraryModel> findBookById(@PathVariable Long id) {
         return libraryService.findOneBook(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    //@PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = "/books")
     @ResponseStatus(HttpStatus.CREATED)
     public LibraryModel registerNewBook(@RequestBody LibraryModel libraryModel) {
         return libraryService.create(libraryModel);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/books/{id}")
     @ResponseStatus(HttpStatus.OK)
     public LibraryModel updateABook(@PathVariable Long id, @RequestBody LibraryModel libraryModel) {
         return libraryService.updateABook(id, libraryModel);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(path = "/books/{id}")
     public void deleteABook(@PathVariable Long id) {
         libraryService.deleteABook(id);

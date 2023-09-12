@@ -1,9 +1,12 @@
 package com.library.libraryExercise.model;
 
+import com.library.libraryExercise.enuns.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -11,13 +14,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@Table(name = "TB_USER")
+@Entity(name = "users")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserModel implements UserDetails,Serializable {
-    private static final long serialVersionUID = 1L;
+@EqualsAndHashCode(of = "id")
+public class UserModel implements UserDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,15 +33,20 @@ public class UserModel implements UserDetails,Serializable {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "TB_USERS_ROLES",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<RoleModel> roles;
+   private UserRole role;
+
+    public UserModel(String username, String password, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        if (this.role == UserRole.ADMIN)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN")
+                    ,new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLER_USER"));
     }
     @Override
     public String getPassword(){

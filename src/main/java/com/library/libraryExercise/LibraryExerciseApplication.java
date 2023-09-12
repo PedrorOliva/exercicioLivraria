@@ -9,7 +9,8 @@ public class LibraryExerciseApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LibraryExerciseApplication.class, args);
-		System.out.println(new BCryptPasswordEncoder().encode("senha123"));
+
+
 	}
 
 }
